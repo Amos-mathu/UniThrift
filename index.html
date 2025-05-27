@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniThrift - Buy and Sell Student Essentials</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Swiper.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <!-- Toastify.js -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Lootie -->
+     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+    /* Loader animation from Uiverse.io by bociKond */
+    .loader {
+      width: 44.8px;
+      height: 44.8px;
+      color: #554cb5;
+      position: relative;
+      background: radial-gradient(11.2px, currentColor 94%, #0000);
+    }
+
+    .loader:before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background:
+        radial-gradient(10.08px at bottom right, #0000 94%, currentColor) top left,
+        radial-gradient(10.08px at bottom left, #0000 94%, currentColor) top right,
+        radial-gradient(10.08px at top right, #0000 94%, currentColor) bottom left,
+        radial-gradient(10.08px at top left, #0000 94%, currentColor) bottom right;
+      background-size: 22.4px 22.4px;
+      background-repeat: no-repeat;
+      animation: loader 1.5s infinite cubic-bezier(0.3, 1, 0, 1);
+    }
+
+    @keyframes loader {
+      33% {
+        inset: -11.2px;
+        transform: rotate(0deg);
+      }
+      66% {
+        inset: -11.2px;
+        transform: rotate(90deg);
+      }
+      100% {
+        inset: 0;
+        transform: rotate(90deg);
+      }
+    }
+
+    /* Loader wrapper styling */
+    #loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    #loader-wrapper.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Main content hidden initially */
+    #main-content {
+      display: none;
+    }
+
+    body.loaded #main-content {
+      display: block;
+    }
+  </style>
+
+</head>
+<body>
+  <!-- Loader Screen -->
+  <div id="loader-wrapper">
+    <div class="loader"></div>
+  </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="fas fa-store text-primary"></i> UniThrift
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active fw-medium" href="index.html">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" href="post-item.html">
+                            <i class="fas fa-tag me-1"></i> Sell Item
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" href="about.html">
+                            <i class="fas fa-info-circle me-1"></i> About
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium" href="contact.html">
+                            <i class="fas fa-envelope me-1"></i> Contact
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-link" id="darkModeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <a href="login.html" class="btn btn-outline-primary">
+                        <i class="fas fa-user me-1"></i> Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Header -->
+<div class="search-header bg-light py-3 mt-5 border-bottom sticky-top" style="top: 56px;" data-aos="fade-down">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6" data-aos="fade-right">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search items..." id="searchInput">
+          <button class="btn btn-primary" type="button" id="searchBtn">
+            <i class="fas fa-search"></i> Search
+          </button>
+        </div>
+      </div>
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="d-flex justify-content-end gap-3">
+                <select class="form-select w-auto" id="categoryFilter">
+        <option value="">All Categories</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Furniture">Furniture</option>
+        <option value="Books">Books</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Kitchenware">Kitchenware</option>
+        <option value="Art">Art</option>
+        <option value="Sports">Sports</option>
+        </select>
+
+<div id="resultsContainer"></div>
+          <a href="wishlist.html" class="btn btn-outline-danger position-relative" id="wishlistBtn" title="Wishlist">
+            <i class="fas fa-heart"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="wishlistCount">0</span>
+          </a>
+          <a href="cart.html" class="btn btn-outline-primary position-relative">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">0</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Hero Carousel -->
+<section class="hero-carousel" data-aos="fade-up">
+    <div class="swiper hero-swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="carousel-item-bg" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/electronics-bg.jpg') no-repeat center center; background-size: cover;">
+                    <div class="container">
+                        <div class="row min-vh-75">
+                            <div class="col-lg-6 text-white d-flex align-items-center" data-aos="fade-right">
+                                <div>
+                                    <span class="badge bg-primary mb-2">Hot Deals</span>
+                                    <h1 class="display-4 fw-bold mb-3">Student Gadget Sale</h1>
+                                    <p class="lead mb-4">Up to 50% off on Electronics</p>
+                                    <a href="#" class="btn btn-primary btn-lg me-2">Shop Now</a>
+                                    <a href="#" class="btn btn-outline-light btn-lg">Learn More</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="carousel-item-bg" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/furniture-bg.jpg') no-repeat center center; background-size: cover;">
+                    <div class="container">
+                        <div class="row min-vh-75">
+                            <div class="col-lg-6 text-white d-flex align-items-center" data-aos="fade-up">
+                                <div>
+                                    <span class="badge bg-success mb-2">New Arrivals</span>
+                                    <h1 class="display-4 fw-bold mb-3">Dorm Room Essentials</h1>
+                                    <p class="lead mb-4">Special deals on Furniture & Decor</p>
+                                    <a href="#" class="btn btn-success btn-lg me-2">Browse Now</a>
+                                    <a href="#" class="btn btn-outline-light btn-lg">View All</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="carousel-item-bg" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/books-bg.jpg') no-repeat center center; background-size: cover;">
+                    <div class="container">
+                        <div class="row min-vh-75">
+                            <div class="col-lg-6 text-white d-flex align-items-center" data-aos="fade-left">
+                                <div>
+                                    <span class="badge bg-warning mb-2">Limited Time</span>
+                                    <h1 class="display-4 fw-bold mb-3">Textbook Exchange</h1>
+                                    <p class="lead mb-4">Save big on your course materials</p>
+                                    <a href="#" class="btn btn-warning btn-lg me-2">Find Books</a>
+                                    <a href="#" class="btn btn-outline-light btn-lg">Sell Books</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="featured-products py-5" data-aos="fade-up">
+  <div class="container">
+    <h2 class="text-center mb-4">Featured Items</h2>
+    <div class="row g-4" id="featuredProducts">
+      <!-- Products will be dynamically loaded here -->
+    </div>
+  </div>
+</section>
+<!-- Testimonials -->
+<section class="testimonials py-5 bg-light" data-aos="fade-up">
+  <div class="container">
+    <h2 class="text-center mb-5">What Our Users Say</h2>
+    <div class="row g-4">
+
+      <!-- Testimonial Card 1 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card testimonial-card border-0 p-4 text-center h-100 bg-white rounded-4">
+          <img src="https://ui-avatars.com/api/?name=Jane+Doe&background=0D8ABC&color=fff" alt="Jane Doe" class="rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+          <h5 class="fw-semibold">Jane Doe</h5>
+          <p class="text-muted mb-1">Student, University of Nairobi</p>
+          <div class="mb-2 text-warning">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
+          </div>
+          <p class="text-muted fst-italic">"UniThrift helped me furnish my dorm affordably and easily."</p>
+        </div>
+      </div>
+
+      <!-- Testimonial Card 2 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card testimonial-card border-0 p-4 text-center h-100 bg-white rounded-4">
+          <img src="https://ui-avatars.com/api/?name=John+Smith&background=FF6F61&color=fff" alt="John Smith" class="rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+          <h5 class="fw-semibold">John Smith</h5>
+          <p class="text-muted mb-1">Student, Kenyatta University</p>
+          <div class="mb-2 text-warning">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="far fa-star"></i>
+          </div>
+          <p class="text-muted fst-italic">"Great deals on electronics. I got my laptop at half price!"</p>
+        </div>
+      </div>
+
+      <!-- Testimonial Card 3 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card testimonial-card border-0 p-4 text-center h-100 bg-white rounded-4">
+          <img src="https://ui-avatars.com/api/?name=Mary+Wambui&background=6F42C1&color=fff" alt="Mary Wambui" class="rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+          <h5 class="fw-semibold">Mary Wambui</h5>
+          <p class="text-muted mb-1">Student, Moi University</p>
+          <div class="mb-2 text-warning">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+          <p class="text-muted fst-italic">"Selling my books here was fast and easy. Great support too!"</p>
+        </div>
+      </div>
+
+      <!-- Testimonial Card 4 -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card testimonial-card border-0 p-4 text-center h-100 bg-white rounded-4">
+          <img src="https://ui-avatars.com/api/?name=Kevin+Otieno&background=20C997&color=fff" alt="Kevin Otieno" class="rounded-circle mx-auto mb-3" style="width: 80px; height: 80px;">
+          <h5 class="fw-semibold">Kevin Otieno</h5>
+          <p class="text-muted mb-1">Student, Egerton University</p>
+          <div class="mb-2 text-warning">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            <i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
+          </div>
+          <p class="text-muted fst-italic">"UniThrift is a smart way for students to save and earn."</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+      
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section py-5 bg-light" data-aos="fade-up">
+  <div class="container">
+    <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+    <div class="accordion faq-accordion" id="faqAccordion">
+
+      <div class="accordion-item mb-3">
+        <h2 class="accordion-header" id="faqOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+            How do I list an item for sale?
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Simply sign up or log in, go to your dashboard, and click "Add Listing" to post your item with details and images.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-3">
+        <h2 class="accordion-header" id="faqTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+            Are the listed items inspected for quality?
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Sellers are encouraged to upload clear photos and accurate descriptions. Buyers can also rate sellers after transactions.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item mb-3">
+        <h2 class="accordion-header" id="faqThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+            How can I contact customer support?
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            You can reach us 24/7 through the live chat on our site, or email us via support@unithrift.com.
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faqFour">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+            Is there a fee to list or buy items?
+          </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">
+            Listing is free for all users. We only charge a small service fee upon successful transactions to support platform maintenance.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+    <!-- FOOTER -->
+<footer class="bg-dark text-light pt-5 pb-3">
+  <div class="container">
+    <div class="row text-center text-md-start">
+      <!-- About -->
+      <div class="col-md-3 mb-4">
+        <h5 class="text-success fw-bold">About </h5>
+        <p class="small">
+          UniThrift is your student marketplace for buying and selling second-hand essentials — furniture, gadgets, books, and more.
+        </p>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="col-md-3 mb-4">
+        <h5 class="text-success fw-bold">Quick Links</h5>
+        <ul class="list-unstyled small">
+          <li><a href="index.html" class="text-decoration-none text-light">Home</a></li>
+          <li><a href="index.html" class="text-decoration-none text-light">Browse Items</a></li>
+          <li><a href="post-item.html" class="text-decoration-none text-light">Post an Item</a></li>
+          <li><a href="contact.html" class="text-decoration-none text-light">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="col-md-3 mb-4">
+        <h5 class="text-success fw-bold">Contact</h5>
+        <p class="small mb-1"><i class="fas fa-envelope me-2"></i> support@unithrift.com</p>
+        <p class="small mb-1"><i class="fas fa-phone me-2"></i> +254 798 480 715</p>
+        <p class="small"><i class="fas fa-map-marker-alt me-2"></i> Nairobi, Kenya</p>
+      </div>
+
+      <!-- Follow Us -->
+      <div class="col-md-3 mb-4">
+        <h5 class="text-success fw-bold">Follow Us</h5>
+        <div class="d-flex justify-content-center justify-content-md-start gap-2">
+          <a href="#" class="btn btn-outline-success btn-sm rounded-circle"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="btn btn-outline-success btn-sm rounded-circle"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="btn btn-outline-success btn-sm rounded-circle"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="btn btn-outline-success btn-sm rounded-circle"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-light">
+
+    <div class="text-center small">
+      © 2025 UniThrift | Built with ❤️ by <a href="#" class="text-success text-decoration-none">Altratech</a>
+    </div>
+  </div>
+</footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/theme-toggle.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 800,
+    easing: 'ease-in-out',
+    once: true
+  });
+
+  const swiper = new Swiper('.hero-swiper', {
+    loop: true,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev'
+    },
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false
+    }
+  });
+</script>
+<script>
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      document.body.classList.add("loaded");
+      document.getElementById("loader-wrapper").classList.add("hidden");
+    }, 700); // 1000 milliseconds = 0.7 seconds
+  });
+</script>
+</body>
+</html>
+
+
+
+
+
