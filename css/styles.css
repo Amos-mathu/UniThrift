@@ -1,24 +1,111 @@
 :root {
-    --primary-color: #4CAF50;
-    --secondary-color: #2196F3;
-    --accent-color: #FF4081;
-    --text-color: #333;
-    --bg-color: #fff;
-    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Primary Colors */
+    --primary-color: #3F51B5;
+    --secondary-color: #007BFF;
+    --accent-color: #FFD400;
+    
+    /* UI Colors */
+    --background-light: #F8F9FA;
+    --background-dark: #1C1C1E;
+    --surface-light: #FFFFFF;
+    --surface-dark: #2D2D2D;
+    
+    /* Text Colors */
+    --text-primary-light: #1C1C1E;
+    --text-secondary-light: #6C757D;
+    --text-primary-dark: #F8F9FA;
+    --text-secondary-dark: #ADB5BD;
+    
+    /* Status Colors */
+    --success-color: #2ECC71;
+    --error-color: #FF4C61;
+    --warning-color: #FFA726;
+    --info-color: #29B6F6;
+    
+    /* Border & Shadow */
+    --border-color: #E9ECEF;
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    
+    /* Specific Component Colors */
+    --navbar-bg: var(--surface-light);
+    --footer-bg: var(--surface-light);
+    --card-bg: var(--surface-light);
+    --button-hover: #324090;
+    --search-bar-bg: var(--surface-light);
 }
 
+/* Dark Mode Overrides */
 [data-bs-theme="dark"] {
-    --text-color: #fff;
-    --bg-color: #212529;
-    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --navbar-bg: var(--surface-dark);
+    --footer-bg: var(--surface-dark);
+    --card-bg: var(--surface-dark);
+    --text-color: var(--text-primary-dark);
+    --bg-color: var(--background-dark);
+    --border-color: #404040;
+    --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --hover-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    --search-bar-bg: var(--surface-dark);
 }
 
+/* Update existing component styles to use new variables */
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.card {
+    background-color: var(--card-bg);
+    box-shadow: var(--card-shadow);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--button-hover);
+    border-color: var(--button-hover);
+}
+
+.search-bar .form-control {
+    background-color: var(--search-bar-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.price {
+    color: var(--primary-color);
+}
+
+footer {
+    background-color: var(--footer-bg);
+    border-top: 1px solid var(--border-color);
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Update text colors */
 body {
-    font-family: 'Inter', 'Poppins', sans-serif;
     color: var(--text-color);
     background-color: var(--bg-color);
-    transition: background-color 0.3s ease;
+     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
 }
+
+.text-muted {
+    color: var(--text-secondary-light) !important;
+}
+
+[data-bs-theme="dark"] .text-muted {
+    color: var(--text-secondary-dark) !important;
+}
+
+
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', sans-serif;
@@ -153,10 +240,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 footer {
-    background-color: var(--bg-color);
-    border-top: 1px solid rgba(0,0,0,0.1);
+    background-color: var(--footer-bg);
+    border-top: 1px solid var(--border-color);
+    margin-bottom: 0;
+    padding-bottom: 0;
 }
 
+footer .container {
+    margin-bottom: 0;
+}
 .featured-products .card-title {
     font-size: 1.1rem;
     font-weight: 600;
@@ -381,3 +473,6 @@ footer {
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
+main {
+    flex: 1;
+}

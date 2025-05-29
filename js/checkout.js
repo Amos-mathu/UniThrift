@@ -1,5 +1,5 @@
 // checkout.js - Handles checkout flow, order summary, and confirmation
-
+console.log('Cart from localStorage:', localStorage.getItem('cart'));
 const orderSummary = document.getElementById('orderSummary');
 const cartCountBadge = document.getElementById('cartCount');
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -38,7 +38,21 @@ document.getElementById('shippingForm').addEventListener('submit', function(e) {
         Swal.fire({ icon: 'error', title: 'Cart is empty', text: 'Please add items to your cart before checking out.' });
         return;
     }
-    // Simple validation (HTML5 required fields already in place)
+
+    // Prepare order data
+    const newOrder = {
+        orderId: Date.now(), // unique order id using timestamp
+        date: new Date().toISOString().split('T')[0], // format YYYY-MM-DD
+        items: cart.map(item => `${item.title} x${item.quantity}`).join(', '),
+        totalPrice: cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+        status: 'Processing' // default order status
+    };
+
+    // Get existing orders or empty array
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.push(newOrder);
+    localStorage.setItem('orders', JSON.stringify(orders));
+
     Swal.fire({
         icon: 'success',
         title: 'Order Confirmed!',
@@ -46,7 +60,7 @@ document.getElementById('shippingForm').addEventListener('submit', function(e) {
         confirmButtonText: 'OK',
         timer: 2500
     }).then(() => {
-        // Clear cart
+        // Clear cart after successful checkout
         localStorage.removeItem('cart');
         window.location.href = 'orders.html';
     });
